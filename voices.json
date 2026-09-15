@@ -1,0 +1,80 @@
+{
+  "voices": [
+    {
+      "id": "vi-VN-HoaiMyNeural",
+      "name": "Hoài My (Nữ)",
+      "gender": "female",
+      "toneDescription": "Ấm áp, truyền cảm, trong trẻo, chuẩn giọng thuyết minh & sách nói",
+      "style": "Giọng Nữ Thuyết Minh & Sách Nói",
+      "previewPrompt": "Xin chào! Đây là giọng đọc Hoài My của Microsoft Edge TTS, rất vui được đồng hành cùng nội dung của bạn.",
+      "recommendedFor": "Phim tài liệu, audiobook, review phim, video TikTok/Reels, bài giảng"
+    },
+    {
+      "id": "vi-VN-NamMinhNeural",
+      "name": "Nam Minh (Nam)",
+      "gender": "male",
+      "toneDescription": "Trầm ấm, đĩnh đạc, rõ ràng, dứt khoát chuẩn thời sự & podcast",
+      "style": "Giọng Nam Thời Sự & Podcast",
+      "previewPrompt": "Chào bạn, tôi là Nam Minh. Giọng đọc mang lại sự tin cậy, đĩnh đạc và truyền cảm cho các bản tin.",
+      "recommendedFor": "Thời sự, podcast, phóng sự tài chính, review công nghệ, trailer"
+    },
+    {
+      "id": "en-US-JennyNeural",
+      "name": "Jenny (Nữ - US)",
+      "gender": "female",
+      "toneDescription": "Trong trẻo, tươi sáng, chuẩn giọng Anh-Mỹ tự nhiên và lưu loát",
+      "style": "Giọng Nữ Tiếng Anh (Mỹ)",
+      "previewPrompt": "Hello! I am Jenny from Microsoft Edge TTS, ready to narrate your English subtitles smoothly.",
+      "recommendedFor": "Video song ngữ, thuyết minh tiếng Anh, bài học ngoại ngữ"
+    },
+    {
+      "id": "en-US-GuyNeural",
+      "name": "Guy (Nam - US)",
+      "gender": "male",
+      "toneDescription": "Nam tính, tự tin, đĩnh đạc chuẩn giọng Anh-Mỹ hiện đại",
+      "style": "Giọng Nam Tiếng Anh (Mỹ)",
+      "previewPrompt": "Hi there! I am Guy, offering a clear, confident and natural American English narration.",
+      "recommendedFor": "Video công nghệ quốc tế, thuyết trình tiếng Anh, vlog"
+    }
+  ],
+  "tones": [
+    {
+      "id": "default",
+      "label": "Tự nhiên chuẩn Microsoft (Mặc định)",
+      "description": "Ngữ điệu tự nhiên, thông minh, ngắt nghỉ cân đối theo ngữ cảnh",
+      "rate": "+0%",
+      "pitch": "+0Hz"
+    },
+    {
+      "id": "story",
+      "label": "Đọc truyện & Sách nói (Chậm rãi, truyền cảm)",
+      "description": "Tốc độ vừa phải, trầm ấm, tạo cảm giác lôi cuốn sâu lắng",
+      "rate": "-5%",
+      "pitch": "-2Hz"
+    },
+    {
+      "id": "news",
+      "label": "Thời sự & Phóng sự (Dứt khoát, tự tin)",
+      "description": "Tốc độ nhanh vừa, rõ chữ, chuẩn phong cách phát thanh viên",
+      "rate": "+5%",
+      "pitch": "+0Hz"
+    },
+    {
+      "id": "energetic",
+      "label": "Vlog & Năng động (Tươi vui, hoạt bát)",
+      "description": "Tốc độ nhanh, sinh động, phù hợp video ngắn TikTok/YouTube",
+      "rate": "+10%",
+      "pitch": "+4Hz"
+    },
+    {
+      "id": "calm",
+      "label": "Thư giãn & Chữa lành (Dịu nhẹ, thanh thản)",
+      "description": "Chậm rãi, êm ái, mang lại cảm giác bình yên",
+      "rate": "-10%",
+      "pitch": "-4Hz"
+    }
+  ],
+  "sampleVtt": "WEBVTT - Mẫu thuyết minh phim tài liệu vịnh Hạ Long\n\n00:00:01.500 --> 00:00:04.800\nNằm ở vùng Đông Bắc Việt Nam, vịnh Hạ Long là một kỳ quan thiên nhiên vô giá.\n\n00:00:05.200 --> 00:00:09.500\nHàng ngàn hòn đảo đá vôi sừng sững nhô lên giữa làn nước trong xanh ngọc bích.\n\n00:00:10.000 --> 00:00:14.200\nMỗi buổi sớm mai, màn sương mờ ảo bao phủ khắp các hang động cổ xưa.\n\n00:00:15.000 --> 00:00:19.300\nNơi đây không chỉ là thắng cảnh, mà còn là bản giao hưởng huyền diệu của đất trời.\n\n00:00:20.100 --> 00:00:24.000\nChào đón bạn đến với hành trình khám phá di sản thiên nhiên thế giới tuyệt mỹ này.",
+  "sampleTxt": "Hạnh phúc đích thực không nằm ở nơi cuối con đường, mà nằm trong từng bước chân ta đang đi.\nKhi tâm trí an yên, mỗi khoảnh khắc trôi qua đều là một món quà vô giá của cuộc sống.\nHãy lắng nghe hơi thở, cảm nhận sự sống đang tuôn chảy tràn ngập từng giác quan.\nMỗi ngày mới là một cơ hội để bắt đầu lại, yêu thương nhiều hơn và trao đi những điều tử tế nhất.\nChúc bạn luôn tìm thấy sự bình an trong tâm hồn và niềm vui trong từng việc nhỏ bé thường ngày.",
+  "sampleCsv": "STT,Nội dung câu nói,Ghi chú\n1,\"Chào mừng quý khách đã đến với chương trình trải nghiệm âm thanh AI.\",\"Lời chào mở đầu\"\n2,\"Hệ thống hỗ trợ xử lý file CSV, TXT và VTT không giới hạn dung lượng.\",\"Giới thiệu tính năng\"\n3,\"Bạn có thể tùy chỉnh giọng đọc, tốc độ và ngữ điệu theo ý muốn.\",\"Hướng dẫn cài đặt\"\n4,\"Mọi câu thoại sẽ được chuyển đổi mượt mà và xuất ra file MP3 chất lượng cao.\",\"Quy trình xuất file\"\n5,\"Cảm ơn bạn đã lựa chọn sử dụng ứng dụng của chúng tôi!\",\"Lời kết\""
+}

@@ -1,0 +1,6 @@
+{
+  "name": "VTT to AUDIO",
+  "description": "Chuyển đổi phụ đề WebVTT sang âm thanh giọng đọc AI thuần HTML, CSS, JS, JSON, chuẩn mốc thời gian và xuất file MP3 / MP4.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
