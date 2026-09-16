@@ -1005,86 +1005,6 @@ async function handlePreviewSingleCue(cue) {
   }
 }
 
-// Client-side MP3 Synthesizer for pure static / 405 offline resilience
-async function synthesizeClientSideMP3(updateProgress) {
-  updateProgress(50, 'Đang tổng hợp và mã hóa MP3 cục bộ (LameJS Engine)...');
-
-  const sampleRate = 24000;
-  const isPreserveTiming = state.hasTimeline && state.settings.preserveTiming;
-  const totalCues = state.cues.length;
-  const lastCue = state.cues[totalCues - 1];
-  const targetDuration = (isPreserveTiming && lastCue?.endSec) ? lastCue.endSec : state.cues.reduce((sum, c) => sum + (c.duration || 2) + 0.3, 0);
-
-  const totalSamples = Math.max(sampleRate * 2, Math.round(targetDuration * sampleRate));
-  const pcm = new Int16Array(totalSamples);
-
-  // Synthesize speech waveforms for each subtitle cue
-  for (let idx = 0; idx < totalCues; idx++) {
-    const cue = state.cues[idx];
-    const startSec = isPreserveTiming ? cue.startSec : (idx * 3.0);
-    const cueDur = Math.max(0.6, cue.duration || 2.0);
-    const startSample = Math.min(totalSamples - 1, Math.round(startSec * sampleRate));
-    const cueSamples = Math.min(totalSamples - startSample, Math.round(cueDur * sampleRate));
-
-    // Generate natural acoustic formant harmonics (pure vocal simulation)
-    const baseFreq = (state.settings.voice && state.settings.voice.includes('Nam')) ? 125 : 210;
-    for (let s = 0; s < cueSamples; s++) {
-      const t = s / sampleRate;
-      const env = Math.sin((s / cueSamples) * Math.PI); // smooth envelope
-      const f1 = Math.sin(2 * Math.PI * baseFreq * t);
-      const f2 = 0.5 * Math.sin(2 * Math.PI * baseFreq * 2.1 * t);
-      const f3 = 0.25 * Math.sin(2 * Math.PI * baseFreq * 3.2 * t);
-      const sampleVal = (f1 + f2 + f3) * 0.3 * env * 32767;
-      pcm[startSample + s] = Math.max(-32768, Math.min(32767, Math.round(sampleVal)));
-    }
-  }
-
-  updateProgress(75, 'Đang đóng gói file âm thanh MP3 chuẩn bit-rate...');
-
-  // Use LameJS to encode to real MP3
-  const Mp3Encoder = (window.lamejs && window.lamejs.Mp3Encoder) ? window.lamejs.Mp3Encoder : null;
-  let mp3Blob = null;
-
-  if (Mp3Encoder) {
-    const encoder = new Mp3Encoder(1, sampleRate, Number(state.settings.bitrate) || 128);
-    const mp3Chunks = [];
-    const chunkSize = 1152;
-    for (let i = 0; i < pcm.length; i += chunkSize) {
-      const chunk = pcm.subarray(i, i + chunkSize);
-      const mp3buf = encoder.encodeBuffer(chunk);
-      if (mp3buf.length > 0) mp3Chunks.push(mp3buf);
-    }
-    const endBuf = encoder.flush();
-    if (endBuf.length > 0) mp3Chunks.push(endBuf);
-    mp3Blob = new Blob(mp3Chunks, { type: 'audio/mp3' });
-  } else {
-    // Standard WAV fallback if LameJS is not loaded
-    mp3Blob = new Blob([pcm.buffer], { type: 'audio/wav' });
-  }
-
-  const mp3Url = URL.createObjectURL(mp3Blob);
-  const cueTimings = state.cues.map(c => ({
-    id: c.id,
-    index: c.index,
-    text: c.text,
-    start: c.startSec,
-    end: c.endSec,
-    duration: c.duration
-  }));
-
-  state.generationResult = {
-    blob: mp3Blob,
-    url: mp3Url,
-    duration: targetDuration,
-    fileSize: mp3Blob.size,
-    bitrate: state.settings.bitrate,
-    cueTimings
-  };
-
-  renderPlayer(state.generationResult);
-  updateProgress(100, 'Hoàn tất! Đã tạo file MP3 đồng bộ VTT thành công.');
-}
-
 // Generate Full Audio in a Single Request to Edge TTS backend
 async function handleGenerateFullAudio() {
   if (state.cues.length === 0) {
@@ -1312,31 +1232,22 @@ async function handleGenerateFullAudio() {
     if (playerSec) playerSec.scrollIntoView({ behavior: 'smooth' });
 
   } catch (err) {
-    if (err.isStaticOr405) {
-      console.warn('Backend unavailable or static host (405/404). Falling back to Client-Side MP3 synthesis.');
-      try {
-        await synthesizeClientSideMP3(updateProgress);
-        setTimeout(() => {
-          if (progressBox) progressBox.classList.remove('active');
-        }, 2500);
-        const playerSec = document.getElementById('audio-player-section');
-        if (playerSec) playerSec.scrollIntoView({ behavior: 'smooth' });
-        return;
-      } catch (clientErr) {
-        err = clientErr;
-      }
-    }
-
     if (progressBox) {
       progressBox.classList.add('error');
     }
     if (progressBar) {
       progressBar.style.backgroundColor = 'var(--rose-primary)';
     }
-    if (progressText) {
-      progressText.innerHTML = `<span class="material-symbols-outlined icon-sm" style="color:var(--rose-primary); vertical-align:middle;">error</span> <strong>✕ Lỗi:</strong> ${escapeHtml(err.message)}`;
+
+    let userMsg = err.message || 'Không thể tạo âm thanh.';
+    if (err.isStaticOr405) {
+      userMsg = 'Trang web đang chạy trên máy chủ tĩnh (như GitHub Pages) nên không có máy chủ tạo file MP3 nơ-ron. Vui lòng deploy lên Cloud Run, Render, Vercel hoặc chạy Node.js local để xuất file MP3 Microsoft Edge TTS chuẩn.';
     }
-    alert('Quá trình tạo audio thất bại:\n\n' + err.message);
+
+    if (progressText) {
+      progressText.innerHTML = `<span class="material-symbols-outlined icon-sm" style="color:var(--rose-primary); vertical-align:middle;">error</span> <strong>✕ Lỗi:</strong> ${escapeHtml(userMsg)}`;
+    }
+    alert('Không thể tạo file MP3:\n\n' + userMsg);
   }
 }
 
